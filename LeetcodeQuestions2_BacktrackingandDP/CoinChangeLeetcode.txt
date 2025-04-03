@@ -1,0 +1,24 @@
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        Integer dp[] = new Integer[amount + 1];
+        int res = coinChangeHelper(coins , amount , dp);
+        return res == Integer.MAX_VALUE ? -1 : res;
+    }   
+
+    public int coinChangeHelper(int[] coins , int amount , Integer[] dp){
+        if(amount == 0)return 0;
+        if(amount < 0) return Integer.MAX_VALUE;
+
+        if(dp[amount]!= null) return dp[amount];
+        int minCoins = Integer.MAX_VALUE;
+        for(int coin : coins){
+            int res = coinChangeHelper(coins , amount - coin , dp);
+            if(res != Integer.MAX_VALUE){
+                minCoins = Math.min(minCoins , res + 1);
+            }
+        }
+
+        dp[amount] =  minCoins;
+        return dp[amount];
+    }
+}

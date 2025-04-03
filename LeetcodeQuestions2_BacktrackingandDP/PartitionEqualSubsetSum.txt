@@ -1,0 +1,81 @@
+// class Solution {
+//     public boolean canPartition(int[] nums) {
+//         int sum = 0;
+//         for(int i : nums){
+//             sum += i;
+//         }
+
+//         if(sum % 2 != 0){
+//             return false;
+//         }
+
+//         int targetSum = sum / 2;
+
+//         return helper(nums , 0 , targetSum);
+
+//     }
+
+//     boolean helper(int[]  nums , int index , int targetSum ){
+//         if(targetSum == 0){
+//             return true;
+//         }
+
+//         if(targetSum < 0 || index == nums.length){
+//             return false;
+//         }
+
+//         boolean takeIt = helper(nums , index + 1 , targetSum - nums[index]);
+//         boolean notTakeIt = helper(nums , index + 1 , targetSum);
+
+//         return takeIt || notTakeIt;
+//     }
+// }
+
+
+class Solution {
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        for(int i : nums){
+            sum += i;
+        }
+
+        if(sum % 2 != 0){
+            return false;
+        }
+
+        int targetSum = sum / 2;
+        // Boolean dp[][] = new Boolean[nums.length][targetSum + 1];
+
+        // return helper(nums , 0 , targetSum , dp);
+        boolean[] dp = new boolean[targetSum + 1];
+        dp[0] = true;
+
+        for(int num : nums){
+            for(int i = targetSum;i >= num;i--){
+                dp[i] = dp[i] || dp[i - num];
+            }
+        } 
+
+        return dp[targetSum];
+
+    }
+
+    boolean helper(int[]  nums , int index , int targetSum , Boolean[][] dp){
+        if(targetSum == 0){
+            return true;
+        }
+
+        if(targetSum < 0 || index == nums.length){
+            return false;
+        }
+
+        if(dp[index][targetSum] != null)return dp[index][targetSum];
+
+        boolean takeIt = helper(nums , index + 1 , targetSum - nums[index] , dp);
+        boolean notTakeIt = helper(nums , index + 1 , targetSum , dp);
+
+        dp[index][targetSum] =  takeIt || notTakeIt;
+
+        return dp[index][targetSum];
+    }
+}

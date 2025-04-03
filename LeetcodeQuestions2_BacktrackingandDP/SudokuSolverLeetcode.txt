@@ -1,0 +1,60 @@
+class Solution {
+    
+    public void solveSudoku(char[][] board) {
+        solve(board);
+    }
+
+    public boolean solve(char board[][]){
+        for(int row = 0;row<9;row++){
+            for(int col = 0;col<9;col++){
+                if(board[row][col] == '.'){
+                    for(char c = '1';c<='9';c++){
+                        if(isSafeToPlace(row , col , c , board)){
+                            board[row][col] = c;
+
+                            if(solve(board)){
+                                return true;
+                            }
+                            
+                            board[row][col] = '.';
+                        }
+                    }
+                    return false;
+                }
+            }
+
+        }
+        return true;
+    }
+
+    public boolean isSafeToPlace(int row , int col , char ch , char[][] board){
+        //Check in same Row
+
+        for(int i = 0;i<9;i++){
+            if(board[row][i] == ch){
+                return false;
+            }
+        }
+
+        //check in Same Col
+
+        for(int i = 0;i<9;i++){
+            if(board[i][col] == ch){
+                return false;
+            }
+        }
+
+        int startingRow = row - row % 3;
+        int startingCol = col - col % 3;
+
+        for(int i = 0;i<3;i++){
+            for(int j = 0;j<3;j++){
+                if(board[startingRow + i][startingCol + j] == ch){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+}
